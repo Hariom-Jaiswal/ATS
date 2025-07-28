@@ -16,14 +16,12 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Signup-only fields
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [phone, setPhone] = useState("");
   const [sapNumber, setSapNumber] = useState("");
 
-  // Validation functions
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -42,7 +40,6 @@ export default function LoginPage() {
     return sap.length >= 8 && /^[0-9]+$/.test(sap);
   };
 
-  // Function to redirect user based on their role
   const redirectUserByRole = async (uid: string) => {
     try {
       const userDoc = await getDoc(doc(db, "users", uid));
@@ -50,7 +47,6 @@ export default function LoginPage() {
         const userData = userDoc.data();
         const role = userData.role || "user";
         
-        // Redirect based on role
         if (role === "admin") {
           window.location.href = "/dashboard/admin";
         } else if (role === "committee") {
@@ -59,12 +55,10 @@ export default function LoginPage() {
           window.location.href = "/dashboard/user";
         }
       } else {
-        // If no user data found, redirect to user dashboard
         window.location.href = "/dashboard/user";
       }
     } catch (error) {
       console.error("Error getting user data:", error);
-      // Fallback to user dashboard
       window.location.href = "/dashboard/user";
     }
   };
@@ -75,7 +69,6 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // Validation
       if (!validateEmail(email)) {
         throw new Error("Please enter a valid email address");
       }
@@ -106,7 +99,6 @@ export default function LoginPage() {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         console.log("Logged in:", userCredential.user);
         
-        // Redirect based on user role
         await redirectUserByRole(userCredential.user.uid);
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -121,12 +113,12 @@ export default function LoginPage() {
           email: email.toLowerCase(),
           uid: user.uid,
           createdAt: new Date().toISOString(),
-          role: "user", // Default role
+          role: "user", 
         });
 
         alert("Signup successful! Please log in.");
         setTab("login");
-        // Clear form
+        
         setEmail("");
         setPassword("");
         setFirstName("");
@@ -138,7 +130,7 @@ export default function LoginPage() {
     } catch (error: any) {
       console.error("Auth error:", error);
       
-      // Handle specific Firebase errors
+      
       if (error.code === "auth/user-not-found") {
         setError("No account found with this email. Please sign up.");
         setTab("signup");
@@ -162,20 +154,20 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-cover bg-center flex items-center justify-center bg-black">
       <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-lg shadow-lg w-full max-w-sm p-6 z-10 relative text-black">
-        {/* Header */}
+        
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-black">Annual Talent Search</h1>
           <p className="text-sm text-gray-600">Mithibai Cultural Committee</p>
         </div>
 
-        {/* Error Message */}
+        
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
 
-        {/* Tabs */}
+        
         <div className="flex mb-4">
           {["login", "signup"].map((t) => (
             <button
@@ -195,7 +187,7 @@ export default function LoginPage() {
           ))}
         </div>
 
-        {/* Form */}
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           {tab === "signup" && (
             <>

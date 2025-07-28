@@ -14,13 +14,13 @@ export default function AdminPanel() {
   const [updating, setUpdating] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if user is admin
+    
     if (userData?.role !== "admin") {
       router.push("/verification");
       return;
     }
 
-    // Load all users
+    
     loadUsers();
   }, [userData, router]);
 
@@ -49,7 +49,6 @@ export default function AdminPanel() {
         updatedBy: user?.uid
       });
       
-      // Update local state
       setUsers(prev => prev.map(u => 
         u.id === userId ? { ...u, role: newRole } : u
       ));

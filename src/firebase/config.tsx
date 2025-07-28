@@ -1,9 +1,7 @@
-// firebase/config.ts
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Check if environment variables are available
 const requiredEnvVars = [
   'NEXT_PUBLIC_FIREBASE_API_KEY',
   'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN',
@@ -12,14 +10,6 @@ const requiredEnvVars = [
   'NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID',
   'NEXT_PUBLIC_FIREBASE_APP_ID'
 ];
-
-// Validate environment variables
-/*for (const envVar of requiredEnvVars) {
-  if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
-    throw new Error(`Missing required environment variable: ${envVar}`);
-  }
-}*/
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
@@ -31,7 +21,6 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Log config for debugging (remove in production)
 console.log("Firebase config loaded:", {
   apiKey: firebaseConfig.apiKey ? "***" + firebaseConfig.apiKey.slice(-4) : "missing",
   authDomain: firebaseConfig.authDomain,
