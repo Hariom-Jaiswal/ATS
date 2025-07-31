@@ -32,13 +32,13 @@ You can also use the provided script in your browser console:
 const uid = "user-uid-here";
 
 // Create admin user
-createAdminUser(uid, {
-  firstName: "Admin",
-  lastName: "User", 
-  email: "admin@example.com",
-  phone: "1234567890",
-  sapNumber: "12345678"
-});
+    createAdminUser(uid, {
+    firstName: "Admin",
+    lastName: "User", 
+    email: "admin@example.com",
+    phone: "1234567890",
+    sapNumber: "12345678"
+    });
 
 // Create committee user
 createCommitteeUser(uid, {

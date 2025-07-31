@@ -16,7 +16,7 @@ export default function Home() {
           Annual Talent Search
         </h1>
         <p className="text-xl text-gray-300 mb-8">
-          Event By Mithibai Cultural Committee
+          Mithibai Cultural Committee
         </p>
         <Link 
           href="/verification"
