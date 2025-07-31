@@ -96,12 +96,12 @@ export default function EventsPage() {
         
         <h1 className="text-lg font-bold text-black">Events 2025-26</h1>
         
-        <div className="w-10"></div> {/* Spacer for centering */}
+        <div className="w-10"></div>
       </header>
 
       {/* Main Content */}
-      <main className="px-4 py-6">
-        <div className="space-y-6">
+      <main className="px-4 py-6 flex items-center justify-center">
+        <div className="w-95 space-y-6">
           {getEventsByCategory().map(({ category, events: categoryEvents }) => (
             <div key={category} className="space-y-3">
               {/* Category Header */}

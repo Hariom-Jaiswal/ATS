@@ -19,7 +19,7 @@ export default function CommitteeDashboard() {
   const handleLogout = async () => {
     const { error } = await logout();
     if (!error) {
-      router.push("/verification");
+      router.push("/");
     } else {
       alert("Logout failed: " + error);
     }
@@ -130,7 +130,7 @@ export default function CommitteeDashboard() {
 
       <div className="min-h-screen bg-white">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 flex px-2 py-2">
+        <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           
           {/*Settings Icon*/}
           <button 
@@ -143,7 +143,9 @@ export default function CommitteeDashboard() {
             </svg>
           </button>
           
-          <h1 className="text-lg font-bold text-black w-full text-center py-2">Committee</h1>
+          <h1 className="text-lg font-bold text-black">Committee</h1>
+
+          <div className="w-10"></div>
 
         </header>
 

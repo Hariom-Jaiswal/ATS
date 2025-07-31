@@ -5,6 +5,8 @@ import { useAuth } from "@/components/AuthContext";
 import { logout } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
+
 
 interface Event {
   id: string;
@@ -26,6 +28,7 @@ export default function UserDashboard() {
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
   const [registeredEvents, setRegisteredEvents] = useState<string[]>([]);
+  const [showQRCode, setShowQRCode] = useState(false);
 
   // Load registered events from localStorage on component mount
   useEffect(() => {
@@ -46,16 +49,25 @@ export default function UserDashboard() {
   const handleLogout = async () => {
     const { error } = await logout();
     if (!error) {
-      router.push("/verification");
+      router.push("/");
     } else {
       alert("Logout failed: " + error);
     }
   };
 
-
   // Register Button
   const handleRegisterEvents = () => {
     router.push("/events");
+  };
+
+  // Show QR Code
+  const handleShowQRCode = () => {
+    setShowQRCode(true);
+  };
+
+  // Close QR Code Modal
+  const handleCloseQRCode = () => {
+    setShowQRCode(false);
   };
 
   // Initials Of Profile Photo
@@ -64,12 +76,25 @@ export default function UserDashboard() {
     return `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`.toUpperCase();
   };
 
+  // Generate QR Code Data
+  const getQRCodeData = () => {
+    const userInfo = {
+      sapId: userData?.sapNumber,
+      name: `${userData?.firstName} ${userData?.lastName}`,
+      email: userData?.email,
+      role: userData?.role,
+      timestamp: new Date().toISOString()
+    };
+    return JSON.stringify(userInfo);
+  };
+
   return (
     <ProtectedRoute>
+      
       <div className="min-h-screen bg-white">
         
         {/* NavBar */}
-        <header className="bg-white border-b border-gray-200 flex px-2 py-2">
+        <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           
           {/*Settings Icon*/}
           <button 
@@ -82,7 +107,9 @@ export default function UserDashboard() {
             </svg>
           </button>
           
-          <h1 className="text-lg font-bold text-black w-full text-center py-2">Participant</h1>
+          <h1 className="text-lg font-bold text-black">Participant</h1>
+
+          <div className="w-10"></div>
 
         </header>
 
@@ -106,12 +133,15 @@ export default function UserDashboard() {
           {/* Profile Section */}
           <div className="text-center space-y-4">
             
-            {/* Avatar */}
-            <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+            {/* Avatar - Clickable for QR Code */}
+            <button 
+              onClick={handleShowQRCode}
+              className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
+            >
               <span className="text-white text-2xl font-bold">
                 {getInitials()}
               </span>
-            </div>
+            </button>
             
             {/* User Info */}
             <div className="space-y-2">
@@ -171,6 +201,47 @@ export default function UserDashboard() {
           </button>
           </div>
         </main>
+
+        {/* QR Code Modal */}
+        {showQRCode && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 mx-4 max-w-sm w-full">
+              <div className="text-center space-y-4">
+                <h3 className="text-lg font-bold text-black">Annual Talent Search</h3>
+                <p className="text-sm text-gray-600">
+                  Show this to committee members for quick check-in
+                </p>
+                
+                {/* QR Code */}
+                <div className="flex justify-center p-4 bg-gray-50 rounded-lg">
+                  <QRCodeSVG 
+                    value={getQRCodeData()}
+                    size={200}
+                    level="L"
+                    minVersion={1}
+                    bgColor="#ffffff"
+                    fgColor="#000000"
+                  />
+                </div>
+                
+                {/* User Info Display */}
+                <div className="text-sm text-gray-600 space-y-1">
+                  <p>{userData?.firstName} {userData?.lastName}</p>
+                  <p>{userData?.sapNumber}</p>
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button
+                    onClick={handleCloseQRCode}
+                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </ProtectedRoute>
   );

@@ -12,7 +12,7 @@ export default function AdminDashboard() {
   const handleLogout = async () => {
     const { error } = await logout();
     if (!error) {
-      router.push("/verification");
+      router.push("/");
     } else {
       alert("Logout failed: " + error);
     }
